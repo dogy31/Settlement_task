@@ -42,7 +42,7 @@ class Queen(Bee):
 class Drone(Bee):
     def __init__(self, bee_id, weight):
         super().__init__(bee_id, weight, max_age=MAX_AGE)
-        self.effectiveness = random.randint(1, DRONE_EFFECTIVENESS)
+        self.effectiveness = random.uniform(0, DRONE_EFFECTIVENESS)
 
 class Worker(Bee):
     def __init__(self, bee_id, weight, role):
@@ -70,9 +70,9 @@ class Larva:
         self.cause_of_death = None
 
     def grow(self, storage):
-        if storage.honey >= 0.2:
-            storage.honey -= 0.2
-            self.weight += 0.2
+        if storage.honey >= 0.4:
+            storage.honey -= 0.4
+            self.weight += 0.4
             self.age += 1
             return True
         self.alive = False
@@ -165,9 +165,14 @@ class Hive:
                 f"Dead bees: {len(self.dead_bees)}\n"
                 f"Starved: {starved}")
 
+    def queen_alive(self):
+        return self.queen.alive
+
 def main():
     hive = Hive()
-    for _ in range(20):  # Симуляция 20 шагов
+    for _ in range(60):  # Симуляция 20 шагов
+        if hive.queen_alive() == False:
+            break
         hive.next_step()
         print(hive.get_stats())
         print("-" * 20)
